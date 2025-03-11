@@ -1,0 +1,62 @@
+#include <IRremote.h> 
+
+const int buttonPin_1 = 9;
+const int buttonPin_2 = 10;
+const int buttonPin_3 = 8;
+const int buttonPin_4 = 7;
+const int buttonPin_5 = 6;
+const int buttonPin_6 = 5;
+const int irPin = 3;
+
+int buttonState_1 = 0;
+int buttonState_2 = 0;
+int buttonState_3 = 0;
+int buttonState_4 = 0;
+int buttonState_5 = 0;
+int buttonState_6 = 0;
+int i = 0;
+boolean flag = false;
+IRsend irsend;
+void setup() {
+  Serial.begin(9600);
+  pinMode(buttonPin_1, INPUT);
+  pinMode(buttonPin_2, INPUT);
+  pinMode(buttonPin_3, INPUT);
+  pinMode(buttonPin_4, INPUT);
+  pinMode(buttonPin_5, INPUT);
+  pinMode(buttonPin_6, INPUT);
+  pinMode(irPin, OUTPUT);
+}
+
+void loop() {
+  buttonState_1 = digitalRead(buttonPin_1);
+  buttonState_2 = digitalRead(buttonPin_2);
+  buttonState_3 = digitalRead(buttonPin_3);
+  buttonState_4 = digitalRead(buttonPin_4);
+  buttonState_5 = digitalRead(buttonPin_5);
+  buttonState_6 = digitalRead(buttonPin_6);
+  if (buttonState_1 == HIGH) {
+    delay(75);
+    irsend.sendNEC(0xFBBC09, 32); //Sends "0xFBBC09" in the NEC protocol when a button is pressed.
+  }
+  if (buttonState_2 == HIGH) {
+    delay(75);
+    irsend.sendNEC(0xFEA857, 32);
+  }
+  if (buttonState_3 == HIGH) {
+    delay(75);
+    irsend.sendNEC(0xF7C03F, 32);
+  }
+    if (buttonState_4 == HIGH) {
+    delay(75);
+    irsend.sendNEC(0xF740BF, 32);
+  }
+    if (buttonState_5 == HIGH) {
+    delay(75);
+    irsend.sendNEC(0xF7807F, 32);
+  }
+    if (buttonState_6 == HIGH) {
+    delay(75);
+    irsend.sendNEC(0xF7609F, 32);
+  }
+}
