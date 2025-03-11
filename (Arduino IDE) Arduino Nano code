@@ -1,0 +1,72 @@
+
+
+#include <IRremote.h>
+
+int RECV_PIN = 4; // define input pin on Arduino  
+const int ledPin_1 = 2;
+const int ledPin_2 = 3;
+const int ledPin_3 = 5;
+const int ledPin_4 = 6;
+const int ledPin_5 = 7;
+const int ledPin_6 = 8;
+
+bool state_1 = false;
+bool state_2 = false;
+bool state_3 = false;
+bool state_4 = false;
+bool state_5 = false;  
+bool state_6 = false;
+
+IRrecv irrecv(RECV_PIN);
+decode_results results;
+
+void setup() {
+    Serial.begin(9600);
+    irrecv.enableIRIn(); // Start the receiver
+    Serial.println("Test for IR signaler");
+    pinMode(ledPin_1, OUTPUT);
+    pinMode(ledPin_2, OUTPUT);
+    pinMode(ledPin_3, OUTPUT);
+    pinMode(ledPin_4, OUTPUT);
+    pinMode(ledPin_5, OUTPUT);
+    pinMode(ledPin_6, OUTPUT);
+}
+
+void loop() {
+    if (irrecv.decode(&results)) {
+        Serial.println(results.value, HEX);
+
+        if (results.value == 0xFFFFFFFF) { // NEC repeat signal
+            irrecv.resume(); 
+            return;
+        }
+
+        if (results.value == 0xFEA857) { // Toggle LED 1
+            state_1 = !state_1;
+            digitalWrite(ledPin_1, state_1 ? HIGH : LOW); //Toggles between these each time the HEX is recieved
+        }
+        if (results.value == 0xFBBC09) { // Toggle LED 2
+            state_2 = !state_2;
+            digitalWrite(ledPin_2, state_2 ? HIGH : LOW);
+        }
+        if (results.value == 0xFC3f17) { // Toggle LED 3
+            state_3 = !state_3;
+            digitalWrite(ledPin_3, state_3 ? HIGH : LOW);
+        }
+        if (results.value == 0xDD8573) { // Toggle LED 4
+            state_4 = !state_4;
+            digitalWrite(ledPin_4, state_4 ? HIGH : LOW);
+        }
+        if (results.value == 0xEE7f2e) { // Toggle LED 5
+            state_5 = !state_5;
+            digitalWrite(ledPin_5, state_5 ? HIGH : LOW);
+        }
+        if (results.value == 0xA9f86f) { // Toggle LED 6
+            state_6 = !state_6;
+            digitalWrite(ledPin_6, state_6 ? HIGH : LOW);
+        }
+        
+        irrecv.resume(); // Receive the next value
+    }
+    delay(200); // Small delay to prevent reading errors
+}
